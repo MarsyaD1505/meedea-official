@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MEEDEA OFFICIAL — Fashion Premium & Semi Blazer</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="[fonts.googleapis.com](https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap)" rel="stylesheet">
 <style>
   :root {
     --black: #0a0a0a;
@@ -595,7 +595,7 @@
   </div>
 </footer>
 
-<a class="wa-float" id="waFloatLink" href="https://wa.me/6282124486398" target="_blank" title="Chat WhatsApp">
+<a class="wa-float" id="waFloatLink" href="[wa.me](https://wa.me/6282124486398)" target="_blank" title="Chat WhatsApp">
   💬
 </a>
 
@@ -628,7 +628,7 @@
         <span>Subtotal</span><span id="summarySubtotal">Rp 0</span>
       </div>
       <div class="order-row">
-        <span>Ongkos Kirim</span><span>Rp 15.000</span>
+        <span>Ongkos Kirim</span><span id="summaryOngkir">Rp 0</span>
       </div>
       <div class="order-row total">
         <span>Total Bayar</span><span id="summaryTotal">Rp 0</span>
@@ -641,7 +641,7 @@
     </div>
     <div class="form-group">
       <label>Nomor WhatsApp *</label>
-      <input type="tel" id="formWA" placeholder="Contoh:08000000000">
+      <input type="tel" id="formWA" placeholder="Contoh: 08000000000">
     </div>
     <div class="form-group">
       <label>Alamat Lengkap *</label>
@@ -650,7 +650,7 @@
     <div class="form-row">
       <div class="form-group">
         <label>Kota *</label>
-        <input type="text" id="formKota" placeholder="Masukan Kota">
+        <input type="text" id="formKota" placeholder="Masukan Kota" oninput="updateOngkir()">
       </div>
       <div class="form-group">
         <label>Kode Pos *</label>
@@ -658,9 +658,9 @@
       </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" id="paymentMethodGroup">
       <label>Metode Pembayaran *</label>
-      <div class="payment-methods">
+      <div class="payment-methods" id="paymentMethods">
         <div class="payment-opt selected" onclick="selectPayment(this, 'Transfer Manual')">
           <div class="pay-icon">🏦</div>
           <div class="pay-name">Transfer Bank</div>
@@ -676,33 +676,23 @@
       </div>
     </div>
     
-<div class="form-group">
-  <label>Metode Pemesanan *</label>
-
-  <div class="payment-methods">
-
-    <div class="payment-opt selected"
-      onclick="selectOrderMethod(this, 'WhatsApp')">
-
-      <div class="pay-name">WhatsApp</div>
+    <div class="form-group" id="orderMethodGroup">
+      <label>Metode Pemesanan *</label>
+      <div class="payment-methods" id="orderMethods">
+        <div class="payment-opt selected" onclick="selectOrderMethod(this, 'WhatsApp')">
+          <div class="pay-name">WhatsApp</div>
+        </div>
+        <div class="payment-opt" onclick="selectOrderMethod(this, 'Email')">
+          <div class="pay-name">Email</div>
+        </div>
+      </div>
     </div>
 
-    <div class="payment-opt"
-      onclick="selectOrderMethod(this, 'Email')">
-
-      <div class="pay-name">Email</div>
+    <div class="form-group" id="emailField" style="display:none;">
+      <label>Email *</label>
+      <input type="email" id="formEmail" placeholder="contoh@email.com">
     </div>
 
-  </div>
-</div>
-
-<div class="form-group" id="emailField" style="display:none;">
-  <label>Email *</label>
-
-  <input type="email"
-    id="formEmail"
-    placeholder="contoh@email.com">
-</div>
     <div class="wa-note">
       📱 <strong>Konfirmasi via WhatsApp</strong><br>
       Setelah kamu klik "Pesan Sekarang", detail pesananmu akan otomatis dikirim ke WhatsApp kami untuk diproses. Kamu juga akan mendapat konfirmasi dari kami!
@@ -711,7 +701,7 @@
     <div class="modal-actions">
       <button class="btn-outline" onclick="closeCheckout()" style="padding:0.9rem">Kembali</button>
       <button class="btn-primary" onclick="submitOrder()" style="padding:1rem 2rem;flex:2">
-        📱 Pesan via WhatsApp
+        📱 Pesan Sekarang
       </button>
     </div>
   </div>
@@ -730,7 +720,7 @@
 </div>
 
 <script>
-// ===================== DATA PRODUK (DENGAN WARNA, FOTO TIAP WARNA, & SIZE) =====================
+// ===================== DATA PRODUK =====================
 const products = [
   { 
     id: 1, 
@@ -739,12 +729,10 @@ const products = [
     price: 150000, 
     oldPrice: 200000, 
     badge: "Sale",
-    // Daftar variasi warna dan foto masing-masing warna
     colors: [
-      { name: "Broken White", img: "https://i.ibb.co/xK9pN6RF/IMG-9594-1.jpg" },
-      { name: "Black", img: "https://i.ibb.co/xK9pN6RF/IMG-9594-1.jpg" },
+      { name: "Broken White", img: "[i.ibb.co](https://i.ibb.co/xK9pN6RF/IMG-9594-1.jpg)" },
+      { name: "Black", img: "[i.ibb.co](https://i.ibb.co/xK9pN6RF/IMG-9594-1.jpg)" },
     ],
-    // Daftar variasi ukuran
     sizes: ["M", "L", "XL"]
   },
   { 
@@ -755,13 +743,12 @@ const products = [
     oldPrice: null, 
     badge: "New",
     colors: [
-      { name: "Cacao", img: "https://i.ibb.co/0VrybBTV/IMG-3164.jpg" },
-      ],
+      { name: "Cacao", img: "[i.ibb.co](https://i.ibb.co/0VrybBTV/IMG-3164.jpg)" },
+    ],
     sizes: ["M", "L"]
   }
 ];
 
-// Menyimpan pilihan sementara pembeli sebelum klik masukkan keranjang
 let selectedVariants = {}; 
 
 // ===================== NOMOR WA TOKO =====================
@@ -770,7 +757,7 @@ const NOMOR_WA_TOKO = "6281386110104";
 // ===================== RUNTIME SYSTEM =====================
 let cart = [];
 let selectedPayment = "Transfer Manual";
-  let selectedOrderMethod = "WhatsApp";
+let selectedOrderMethod = "WhatsApp";
 
 function formatRupiah(n) {
   return "Rp " + n.toLocaleString("id-ID");
@@ -781,7 +768,6 @@ function renderProducts(filter = "semua") {
   const filtered = filter === "semua" ? products : products.filter(p => p.category === filter);
   
   grid.innerHTML = filtered.map(p => {
-    // Set default pilihan warna pertama dan size pertama jika belum diatur
     if (!selectedVariants[p.id]) {
       selectedVariants[p.id] = {
         color: p.colors[0].name,
@@ -792,7 +778,6 @@ function renderProducts(filter = "semua") {
     
     const currentVar = selectedVariants[p.id];
 
-    // Buat element lingkaran warna
     const colorHtml = p.colors.map((c, idx) => `
       <div class="color-dot ${c.name === currentVar.color ? 'active' : ''}" 
            style="background-image: url('${c.img}')" 
@@ -801,7 +786,6 @@ function renderProducts(filter = "semua") {
       </div>
     `).join("");
 
-    // Buat element kotak ukuran
     const sizeHtml = p.sizes.map(s => `
       <div class="size-box ${s === currentVar.size ? 'active' : ''}" 
            onclick="changeProductSize(${p.id}, '${s}', '${filter}')">
@@ -855,7 +839,6 @@ function addToCart(id) {
   const p = products.find(x => x.id === id);
   const v = selectedVariants[id];
   
-  // Keranjang membedakan produk berdasarkan kombinasi warna dan ukuran
   const cartKey = `${id}-${v.color}-${v.size}`;
   const existing = cart.find(x => x.cartKey === cartKey);
   
@@ -923,98 +906,72 @@ function openCart() {
   document.getElementById("cartOverlay").classList.add("open");
   document.getElementById("cartSidebar").classList.add("open");
 }
+
 function closeCart() {
   document.getElementById("cartOverlay").classList.remove("open");
   document.getElementById("cartSidebar").classList.remove("open");
 }
+
 function selectPayment(el, method) {
-
-  document
-    .querySelectorAll(".form-group:first-of-type .payment-opt")
-    .forEach(e => e.classList.remove("selected"));
-
+  document.querySelectorAll("#paymentMethods .payment-opt").forEach(e => e.classList.remove("selected"));
   el.classList.add("selected");
-
   selectedPayment = method;
 }
 
 function selectOrderMethod(el, method) {
-
-  document
-    .querySelectorAll(".form-group:nth-of-type(6) .payment-opt")
-    .forEach(e => e.classList.remove("selected"));
-
+  document.querySelectorAll("#orderMethods .payment-opt").forEach(e => e.classList.remove("selected"));
   el.classList.add("selected");
-
   selectedOrderMethod = method;
 
-  const emailField =
-    document.getElementById("emailField");
+  const emailField = document.getElementById("emailField");
+  emailField.style.display = (method === "Email") ? "block" : "none";
+}
 
-  if(method === "Email") {
-    emailField.style.display = "block";
-  } else {
-    emailField.style.display = "none";
+function getOngkirInfo(kotaInput) {
+  const kotaLower = (kotaInput || "").trim().toLowerCase();
+  if (kotaLower === "purwakarta") {
+    return { ongkir: 10000, text: formatRupiah(10000) };
   }
+  return { ongkir: 0, text: "Akan dikonfirmasi via WhatsApp" };
+}
+
+function updateOngkir() {
+  const kotaInput = document.getElementById("formKota").value;
+  const { ongkir, text } = getOngkirInfo(kotaInput);
+  const subtotal = cart.reduce((s, x) => s + x.price * x.qty, 0);
+  
+  document.getElementById("summaryOngkir").textContent = text;
+  
+  const total = ongkir > 0 ? subtotal + ongkir : subtotal;
+  document.getElementById("summaryTotal").textContent = formatRupiah(total);
 }
 
 function openCheckout() {
-
-  if(cart.length === 0) {
+  if (cart.length === 0) {
     alert("Keranjang masih kosong.");
     return;
   }
 
-  const subtotal =
-  cart.reduce((s, x) => s + x.price * x.qty, 0);
+  const subtotal = cart.reduce((s, x) => s + x.price * x.qty, 0);
 
-  const kota =
-  document.getElementById("formKota")?.value
-  ?.trim()
-  ?.toLowerCase();
-
-  let ongkir = 0;
-  let ongkirText = "";
-
-  if(kota === "purwakarta") {
-
-    ongkir = 10000;
-
-    ongkirText =
-    formatRupiah(ongkir);
-
-  } else {
-
-    ongkir = 0;
-
-    ongkirText =
-    "Akan dikonfirmasi via WhatsApp";
-  }
-
-  const total =
-  kota === "purwakarta"
-  ? subtotal + ongkir
-  : subtotal;
-
-  document.getElementById("summaryItems").innerHTML =
-  cart.map(i =>
+  document.getElementById("summaryItems").innerHTML = cart.map(i =>
     `<div class="order-row">
       <span>${i.name} [${i.color} / ${i.size}] ×${i.qty}</span>
       <span>${formatRupiah(i.price * i.qty)}</span>
     </div>`
   ).join("");
 
-  document.getElementById("summarySubtotal")
-  .textContent = formatRupiah(subtotal);
+  document.getElementById("summarySubtotal").textContent = formatRupiah(subtotal);
+  
+  // Reset ongkir display
+  document.getElementById("summaryOngkir").textContent = "Akan dikonfirmasi via WhatsApp";
+  document.getElementById("summaryTotal").textContent = formatRupiah(subtotal);
 
-  document.getElementById("summaryOngkir")
-  .textContent = ongkirText;
+  // Update ongkir if kota already filled
+  updateOngkir();
 
-  document.getElementById("summaryTotal")
-  .textContent = formatRupiah(total);
-
-  document.getElementById("checkoutModal")
-  .classList.add("open");
+  closeCart();
+  document.getElementById("checkoutModal").classList.add("open");
 }
 
 function closeCheckout() {
@@ -1025,35 +982,17 @@ function submitOrder() {
   const nama = document.getElementById("formNama").value.trim();
   const wa = document.getElementById("formWA").value.trim();
   const alamat = document.getElementById("formAlamat").value.trim();
-  const kota = document.getElementById("formKota").value.trim();
+  const kotaInput = document.getElementById("formKota").value.trim();
   const kodepos = document.getElementById("formKodePos").value.trim();
 
-  if (!nama || !wa || !alamat || !kota || !kodepos) {
+  if (!nama || !wa || !alamat || !kotaInput || !kodepos) {
     alert("Mohon lengkapi semua data yang wajib diisi (*) terlebih dahulu.");
     return;
   }
 
   const subtotal = cart.reduce((s, x) => s + x.price * x.qty, 0);
-  const kota =
-document.getElementById("formKota")?.value
-?.trim()
-?.toLowerCase();
-
-let ongkir = 0;
-let ongkirText = "";
-
-if(kota === "purwakarta") {
-  ongkir = 10000;
-  ongkirText = formatRupiah(ongkir);
-} else {
-  ongkir = 0;
-  ongkirText =
-    "Akan dikonfirmasi via WhatsApp";
-}
-  const total =
-kota.toLowerCase() === "purwakarta"
-? subtotal + ongkir
-: subtotal;
+  const { ongkir, text: ongkirText } = getOngkirInfo(kotaInput);
+  const total = ongkir > 0 ? subtotal + ongkir : subtotal;
 
   const itemList = cart.map(i => `• ${i.name}\n  Varian: ${i.color} (${i.size})\n  Jumlah: ${i.qty} x ${formatRupiah(i.price)} = ${formatRupiah(i.price * i.qty)}`).join("\n\n");
   const orderNo = "MED" + Date.now().toString().slice(-6);
@@ -1067,7 +1006,7 @@ kota.toLowerCase() === "purwakarta"
 Nama: ${nama}
 WhatsApp: ${wa}
 Alamat: ${alamat}
-Kota: ${kota} ${kodepos}
+Kota: ${kotaInput} ${kodepos}
 
 🧾 *DETAIL PESANAN*
 ${itemList}
@@ -1081,36 +1020,19 @@ Ongkos Kirim: ${ongkirText}
 Mohon dikonfirmasi segera, terima kasih! 🙏
   `.trim();
 
-  const url = `https://wa.me/${NOMOR_WA_TOKO}?text=${encodeURIComponent(pesan)}`;
-  if(selectedOrderMethod === "WhatsApp") {
-
-  const url =
-  `https://wa.me/${NOMOR_WA_TOKO}?text=${encodeURIComponent(pesan)}`;
-
-  window.open(url, '_blank');
-
-} else {
-
-  const email =
-  document.getElementById("formEmail")
-  .value.trim();
-
-  if(!email) {
-    alert("Mohon isi email terlebih dahulu.");
-    return;
+  if (selectedOrderMethod === "WhatsApp") {
+    const url = "[wa.me](https://wa.me/)" + NOMOR_WA_TOKO + "?text=" + encodeURIComponent(pesan);
+    window.open(url, "_blank");
+  } else {
+    const email = document.getElementById("formEmail").value.trim();
+    if (!email) {
+      alert("Mohon isi email terlebih dahulu.");
+      return;
+    }
+    const subject = encodeURIComponent("Pesanan Baru MEEDEA OFFICIAL");
+    const body = encodeURIComponent(pesan);
+    window.location.href = "mailto:meedeaofficial@gmail.com?subject=" + subject + "&body=" + body;
   }
-
-  const subject =
-  encodeURIComponent(
-    "Pesanan Baru MEEDEA OFFICIAL"
-  );
-
-  const body =
-  encodeURIComponent(pesan);
-
-  window.location.href =
-  `mailto:meedeaofficial@gmail.com?subject=${subject}&body=${body}`;
-}
 
   closeCheckout();
   document.getElementById("successModal").classList.add("open");
@@ -1123,7 +1045,7 @@ function closeSuccess() {
 }
 
 window.onload = function() {
-  document.getElementById("waFloatLink").href = "https://wa.me/" + NOMOR_WA_TOKO;
+  document.getElementById("waFloatLink").href = "[wa.me](https://wa.me/)" + NOMOR_WA_TOKO;
   renderProducts();
 };
 </script>
