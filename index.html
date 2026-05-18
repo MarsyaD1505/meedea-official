@@ -741,25 +741,23 @@ const products = [
     badge: "Sale",
     // Daftar variasi warna dan foto masing-masing warna
     colors: [
-      { name: "Black", img: "https://ibb.co/0jcNHgck" },
-      { name: "Broken White", img: "https://ibb.co/356DncLR" },
-      { name: "Terracotta", img: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500" }
+      { name: "Broken White", img: "https://i.ibb.co/xK9pN6RF/IMG-9594-1.jpg" },
+      { name: "Black", img: "https://i.ibb.co/xK9pN6RF/IMG-9594-1.jpg" },
     ],
     // Daftar variasi ukuran
     sizes: ["M", "L", "XL"]
   },
   { 
     id: 2, 
-    name: "CLAIRE", 
+    name: "KEYLA", 
     category: "atasan", 
-    price: 249000, 
+    price: 180000, 
     oldPrice: null, 
     badge: "New",
     colors: [
-      { name: "Milo", img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500" },
-      { name: "Sage Green", img: "https://images.unsplash.com/photo-1548624149-f9b1859aa7d0?w=500" }
-    ],
-    sizes: ["All Size", "Big Size"]
+      { name: "Cacao", img: "https://i.ibb.co/0VrybBTV/IMG-3164.jpg" },
+      ],
+    sizes: ["M", "L"]
   }
 ];
 
@@ -767,7 +765,7 @@ const products = [
 let selectedVariants = {}; 
 
 // ===================== NOMOR WA TOKO =====================
-const NOMOR_WA_TOKO = "6282124486398";
+const NOMOR_WA_TOKO = "6281386110104";
 
 // ===================== RUNTIME SYSTEM =====================
 let cart = [];
@@ -929,11 +927,21 @@ function closeCart() {
   document.getElementById("cartOverlay").classList.remove("open");
   document.getElementById("cartSidebar").classList.remove("open");
 }
-
 function selectPayment(el, method) {
 
   document
-    .querySelectorAll(".form-group .payment-opt")
+    .querySelectorAll(".form-group:first-of-type .payment-opt")
+    .forEach(e => e.classList.remove("selected"));
+
+  el.classList.add("selected");
+
+  selectedPayment = method;
+}
+
+function selectOrderMethod(el, method) {
+
+  document
+    .querySelectorAll(".form-group:nth-of-type(6) .payment-opt")
     .forEach(e => e.classList.remove("selected"));
 
   el.classList.add("selected");
@@ -949,48 +957,64 @@ function selectPayment(el, method) {
     emailField.style.display = "none";
   }
 }
-  document.querySelectorAll(".payment-opt").forEach(e => e.classList.remove("selected"));
-  el.classList.add("selected");
-  selectedPayment = method;
-}
 
-const subtotal =
-cart.reduce((s, x) => s + x.price * x.qty, 0);
+function openCheckout() {
 
-const kota =
-document.getElementById("formKota")?.value
-?.trim()
-?.toLowerCase();
+  if(cart.length === 0) {
+    alert("Keranjang masih kosong.");
+    return;
+  }
 
-let ongkir = 0;
-let ongkirText = "";
+  const subtotal =
+  cart.reduce((s, x) => s + x.price * x.qty, 0);
 
-if(kota === "purwakarta") {
+  const kota =
+  document.getElementById("formKota")?.value
+  ?.trim()
+  ?.toLowerCase();
 
-  ongkir = 10000;
+  let ongkir = 0;
+  let ongkirText = "";
 
-  ongkirText =
-  formatRupiah(ongkir);
+  if(kota === "purwakarta") {
 
-} else {
+    ongkir = 10000;
 
-  ongkir = 0;
+    ongkirText =
+    formatRupiah(ongkir);
 
-  ongkirText =
-  "Akan dikonfirmasi via WhatsApp";
-}
+  } else {
 
-const total =
-kota === "purwakarta"
-? subtotal + ongkir
-: subtotal;
+    ongkir = 0;
 
-  document.getElementById("summaryItems").innerHTML = cart.map(i =>
-    `<div class="order-row"><span>${i.name} [${i.color} / ${i.size}] ×${i.qty}</span><span>${formatRupiah(i.price * i.qty)}</span></div>`
+    ongkirText =
+    "Akan dikonfirmasi via WhatsApp";
+  }
+
+  const total =
+  kota === "purwakarta"
+  ? subtotal + ongkir
+  : subtotal;
+
+  document.getElementById("summaryItems").innerHTML =
+  cart.map(i =>
+    `<div class="order-row">
+      <span>${i.name} [${i.color} / ${i.size}] ×${i.qty}</span>
+      <span>${formatRupiah(i.price * i.qty)}</span>
+    </div>`
   ).join("");
-  document.getElementById("summarySubtotal").textContent = formatRupiah(subtotal);
-  document.getElementById("summaryTotal").textContent = formatRupiah(total);
-  document.getElementById("checkoutModal").classList.add("open");
+
+  document.getElementById("summarySubtotal")
+  .textContent = formatRupiah(subtotal);
+
+  document.getElementById("summaryOngkir")
+  .textContent = ongkirText;
+
+  document.getElementById("summaryTotal")
+  .textContent = formatRupiah(total);
+
+  document.getElementById("checkoutModal")
+  .classList.add("open");
 }
 
 function closeCheckout() {
