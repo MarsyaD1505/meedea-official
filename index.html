@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MEEDEA OFFICIAL — Fashion Store</title>
+<title>MEEDEA OFFICIAL — Fashion Premium & Semi Blazer</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -715,8 +715,34 @@
 // ===================== DATA PRODUK =====================
 // KUSTOMISASI: Ganti data produk di sini sesuai tokomu!
 const products = [
-  { id:1, name:"Kemeja Linen Premium", category:"atasan", price:189000, oldPrice:250000, emoji:"👔", badge:"Sale", desc:"Kemeja linen premium, adem dan stylish" },
-  { id:2, name:"Midi Dress Floral", category:"dress", price:275000, oldPrice:null, emoji:"👗", badge:"New", desc:"Dress floral elegan untuk berbagai kesempatan" },
+  { id:1, 
+   name:"MEEDEA - ARABELLA SHIRT", 
+   category:"atasan", 
+   price:150000, 
+   oldPrice:160000, 
+   badge:"Sale", 
+   // Variasi Warna
+   colors: [
+     { name: "Broken White", img: "https://ibb.co/356DncLR" },
+     { name: "Nude Beige", img: "https://ibb.co/356DncLR" },
+  ],
+   // Variasi Ukuran
+   sizes: ["M", "L", "XL"]
+  },
+  { id:2, 
+   name:"MEEDEA - CLAIRE",
+   category:"atasan",
+   price:275000, oldPrice:null,
+   badge:"New", 
+   desc:"Dress floral elegan untuk berbagai kesempatan" },
+  // Variasi Warna
+   colors: [
+     { name: "Broken White", img: "https://ibb.co/356DncLR" },
+     { name: "Nude Beige", img: "https://ibb.co/356DncLR" },
+  ],
+  // Variasi Ukuran
+  sizes: ["M", "L", "XL"]
+  },
   { id:3, name:"Celana Palazzo Wide Leg", category:"bawahan", price:210000, oldPrice:null, emoji:"👖", badge:null, desc:"Celana palazzo yang nyaman dan trendi" },
   { id:4, name:"Blouse Puff Sleeve", category:"atasan", price:155000, oldPrice:195000, emoji:"👚", badge:"Sale", desc:"Blouse lengan balon yang feminin" },
   { id:5, name:"Maxi Dress Polos", category:"dress", price:320000, oldPrice:null, emoji:"👘", badge:"New", desc:"Maxi dress elegan untuk acara formal" },
@@ -725,9 +751,12 @@ const products = [
   { id:8, name:"Topi Bucket Trendy", category:"aksesoris", price:89000, oldPrice:null, emoji:"🧢", badge:null, desc:"Topi bucket trendi untuk sehari-hari" },
 ];
 
+// Menyimpan Pilihan sementara pembeli sebelum klik masukan keranjang
+  let selectedVariants = {};
+  
 // ===================== NOMOR WA TOKO =====================
 // PENTING: Ganti dengan nomor WA tokomu! Format: 62xxxx (tanpa +)
-const NOMOR_WA_TOKO = "6281234567890";
+const NOMOR_WA_TOKO = "6282124486398";
 
 // ===================== CART =====================
 let cart = [];
@@ -740,21 +769,69 @@ function formatRupiah(n) {
 function renderProducts(filter = "semua") {
   const grid = document.getElementById("productsGrid");
   const filtered = filter === "semua" ? products : products.filter(p => p.category === filter);
-  grid.innerHTML = filtered.map(p => `
-    <div class="product-card" data-cat="${p.category}">
-      <div class="product-img">
-        <div class="product-img-inner">${p.emoji}</div>
-        ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ""}
-        <button class="product-add" onclick="addToCart(${p.id})">+ Tambah ke Keranjang</button>
+  grid.innerHTML = filtered.map(p => {
+    // Set default pilihan warna pertama dan size pertama jika belum diatur
+    if (!selectedVariants[p.id]) {
+      selectedVariants[p.id] = {
+        color: p.colors[0].name,
+        img: p.colors[0].img,
+        size: p.sizes[0]
+      };
+    }
+    
+    const currentVar = selectedVariants[p.id];
+
+    // Buat element lingkaran warna
+    const colorHtml = p.colors.map((c, idx) => `
+      <div class="color-dot ${c.name === currentVar.color ? 'active' : ''}" 
+           style="background-image: url('${c.img}')" 
+           title="${c.name}"
+           onclick="changeProductColor(${p.id}, '${c.name}', '${c.img}', '${filter}')">
       </div>
-      <div class="product-name">${p.name}</div>
-      <div class="product-category">${p.category.charAt(0).toUpperCase()+p.category.slice(1)}</div>
-      <div class="product-price">
-        ${p.oldPrice ? `<span class="product-price-old">${formatRupiah(p.oldPrice)}</span>` : ""}
-        ${formatRupiah(p.price)}
+    `).join("");
+
+    // Buat element kotak ukuran
+    const sizeHtml = p.sizes.map(s => `
+      <div class="size-box ${s === currentVar.size ? 'active' : ''}" 
+           onclick="changeProductSize(${p.id}, '${s}', '${filter}')">
+        ${s}
       </div>
-    </div>
-  `).join("");
+    `).join("");
+
+    return `
+      <div class="product-card" id="prod-card-${p.id}">
+        <div class="product-img">
+          <img id="main-img-${p.id}" src="${currentVar.img}" alt="${p.name}">
+          ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ""}
+          <button class="product-add" onclick="addToCart(${p.id})">+ Tambah Ke Keranjang</button>
+        </div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-category">${p.category}</div>
+        <div class="product-price">
+          ${p.oldPrice ? `<span class="product-price-old">${formatRupiah(p.oldPrice)}</span>` : ""}
+          ${formatRupiah(p.price)}
+        </div>
+        
+        <div class="variant-options-wrap">
+          <div class="option-title">Pilih Warna:</div>
+          <div class="color-dots">${colorHtml}</div>
+          <div class="option-title">Pilih Ukuran:</div>
+          <div class="size-boxes">${sizeHtml}</div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function changeProductColor(prodId, colorName, imgUrl, currentFilter) {
+  selectedVariants[prodId].color = colorName;
+  selectedVariants[prodId].img = imgUrl;
+  renderProducts(currentFilter);
+}
+
+function changeProductSize(prodId, sizeName, currentFilter) {
+  selectedVariants[prodId].size = sizeName;
+  renderProducts(currentFilter);
 }
 
 function filterProduct(cat, btn) {
@@ -765,23 +842,40 @@ function filterProduct(cat, btn) {
 
 function addToCart(id) {
   const p = products.find(x => x.id === id);
-  const existing = cart.find(x => x.id === id);
-  if (existing) { existing.qty++; }
-  else { cart.push({ ...p, qty: 1 }); }
+  const v = selectedVariants[id];
+  
+  // Keranjang membedakan produk berdasarkan kombinasi warna dan ukuran
+  const cartKey = `${id}-${v.color}-${v.size}`;
+  const existing = cart.find(x => x.cartKey === cartKey);
+  
+  if (existing) { 
+    existing.qty++; 
+  } else { 
+    cart.push({ 
+      cartKey: cartKey,
+      id: p.id,
+      name: p.name,
+      price: p.price,
+      color: v.color,
+      size: v.size,
+      image: v.img,
+      qty: 1 
+    }); 
+  }
   updateCartUI();
   openCart();
 }
 
-function removeFromCart(id) {
-  cart = cart.filter(x => x.id !== id);
+function removeFromCart(cartKey) {
+  cart = cart.filter(x => x.cartKey !== cartKey);
   updateCartUI();
 }
 
-function changeQty(id, delta) {
-  const item = cart.find(x => x.id === id);
+function changeQty(cartKey, delta) {
+  const item = cart.find(x => x.cartKey === cartKey);
   if (!item) return;
   item.qty += delta;
-  if (item.qty <= 0) { removeFromCart(id); return; }
+  if (item.qty <= 0) { removeFromCart(cartKey); return; }
   updateCartUI();
 }
 
@@ -798,22 +892,22 @@ function updateCartUI() {
   }
   container.innerHTML = cart.map(item => `
     <div class="cart-item">
-      <div class="cart-item-img">${item.emoji}</div>
+      <div class="cart-item-img"><img src="${item.image}" alt="${item.name}"></div>
       <div class="cart-item-info">
         <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-meta">Varian: ${item.color} (${item.size})</div>
         <div class="cart-item-price">${formatRupiah(item.price)}</div>
         <div class="cart-item-qty">
-          <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+          <button class="qty-btn" onclick="changeQty('${item.cartKey}',-1)">−</button>
           <span class="qty-num">${item.qty}</span>
-          <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
-          <button class="remove-item" onclick="removeFromCart(${item.id})">Hapus</button>
+          <button class="qty-btn" onclick="changeQty('${item.cartKey}',1)">+</button>
+          <button class="remove-item" onclick="removeFromCart('${item.cartKey}')">Hapus</button>
         </div>
       </div>
     </div>
   `).join("");
 }
 
-// ===================== CART OPEN/CLOSE =====================
 function openCart() {
   document.getElementById("cartOverlay").classList.add("open");
   document.getElementById("cartSidebar").classList.add("open");
@@ -823,7 +917,6 @@ function closeCart() {
   document.getElementById("cartSidebar").classList.remove("open");
 }
 
-// ===================== CHECKOUT =====================
 function selectPayment(el, method) {
   document.querySelectorAll(".payment-opt").forEach(e => e.classList.remove("selected"));
   el.classList.add("selected");
@@ -838,18 +931,17 @@ function openCheckout() {
   const total = subtotal + ongkir;
 
   document.getElementById("summaryItems").innerHTML = cart.map(i =>
-    `<div class="order-row"><span>${i.name} ×${i.qty}</span><span>${formatRupiah(i.price * i.qty)}</span></div>`
+    `<div class="order-row"><span>${i.name} [${i.color} / ${i.size}] ×${i.qty}</span><span>${formatRupiah(i.price * i.qty)}</span></div>`
   ).join("");
   document.getElementById("summarySubtotal").textContent = formatRupiah(subtotal);
   document.getElementById("summaryTotal").textContent = formatRupiah(total);
-
   document.getElementById("checkoutModal").classList.add("open");
 }
+
 function closeCheckout() {
   document.getElementById("checkoutModal").classList.remove("open");
 }
 
-// ===================== SUBMIT ORDER → WA =====================
 function submitOrder() {
   const nama = document.getElementById("formNama").value.trim();
   const wa = document.getElementById("formWA").value.trim();
@@ -866,12 +958,11 @@ function submitOrder() {
   const ongkir = 15000;
   const total = subtotal + ongkir;
 
-  // Format pesan WhatsApp
-  const itemList = cart.map(i => `• ${i.name} ×${i.qty} = ${formatRupiah(i.price * i.qty)}`).join("\n");
-  const orderNo = "LMN" + Date.now().toString().slice(-6);
+  const itemList = cart.map(i => `• ${i.name}\n  Varian: ${i.color} (${i.size})\n  Jumlah: ${i.qty} x ${formatRupiah(i.price)} = ${formatRupiah(i.price * i.qty)}`).join("\n\n");
+  const orderNo = "MED" + Date.now().toString().slice(-6);
 
   const pesan = `
-🛍 *PESANAN BARU — LUMINA*
+🛍 *PESANAN BARU — MEEDEA OFFICIAL*
 ━━━━━━━━━━━━━━━━━━━
 🔖 No. Pesanan: *${orderNo}*
 
@@ -894,20 +985,25 @@ Mohon dikonfirmasi segera, terima kasih! 🙏
   `.trim();
 
   const url = `https://wa.me/${NOMOR_WA_TOKO}?text=${encodeURIComponent(pesan)}`;
-  window.open(url, "_blank");
+  window.open(url, '_blank');
 
   closeCheckout();
+  document.getElementById("successModal").classList.add("open");
   cart = [];
   updateCartUI();
-  document.getElementById("successModal").classList.add("open");
 }
 
 function closeSuccess() {
   document.getElementById("successModal").classList.remove("open");
 }
 
-// ===================== INIT =====================
-renderProducts();
+window.onload = function() {
+  document.getElementById("waFloatLink").href = "https://wa.me/" + NOMOR_WA_TOKO;
+  renderProducts();
+};
+</script>
+</body>
+</html>
 </script>
 </body>
 </html>
