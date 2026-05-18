@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMINA — Fashion Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #fafaf8;
+    --cream: #f5f0e8;
+    --accent: #c4a882;
+    --accent-dark: #8b6f4e;
+    --gray: #888;
+    --light-gray: #e8e4dc;
+    --text: #1a1a1a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text); overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(250,250,248,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--light-gray);
+    transition: all 0.3s;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; font-weight: 300;
+    letter-spacing: 0.3em; color: var(--black); text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text); text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent-dark); }
+  .nav-actions { display: flex; align-items: center; gap: 1.2rem; }
+  .cart-btn {
+    background: var(--black); color: var(--white);
+    border: none; cursor: pointer;
+    padding: 0.5rem 1.2rem; font-size: 0.75rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif;
+    display: flex; align-items: center; gap: 0.5rem;
+    transition: background 0.2s;
+  }
+  .cart-btn:hover { background: var(--accent-dark); }
+  .cart-count {
+    background: var(--accent); color: var(--white);
+    border-radius: 50%; width: 18px; height: 18px;
+    font-size: 0.65rem; display: flex; align-items: center; justify-content: center;
+    font-weight: 500;
+  }
+
+  /* HERO */
+  #beranda {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 0 3rem;
+    background: var(--cream);
+    position: relative; overflow: hidden;
+  }
+  .hero-content { max-width: 600px; z-index: 1; }
+  .hero-eyebrow {
+    font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent-dark); margin-bottom: 1.5rem;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 300; line-height: 1.05;
+    color: var(--black); margin-bottom: 1.5rem;
+  }
+  .hero-title em { font-style: italic; color: var(--accent-dark); }
+  .hero-desc { font-size: 0.95rem; color: var(--gray); line-height: 1.8; margin-bottom: 2.5rem; max-width: 420px; }
+  .btn-primary {
+    background: var(--black); color: var(--white);
+    border: none; cursor: pointer;
+    padding: 1rem 2.5rem; font-size: 0.75rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s; display: inline-block;
+    text-decoration: none;
+  }
+  .btn-primary:hover { background: var(--accent-dark); }
+  .btn-outline {
+    background: transparent; color: var(--black);
+    border: 1px solid var(--black); cursor: pointer;
+    padding: 0.9rem 2.5rem; font-size: 0.75rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s; margin-left: 1rem;
+  }
+  .btn-outline:hover { background: var(--black); color: var(--white); }
+  .hero-deco {
+    position: absolute; right: -5%; top: 50%; transform: translateY(-50%);
+    width: 55%; height: 90%;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    opacity: 0.12; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  }
+  .hero-img-wrap {
+    position: absolute; right: 3rem; top: 50%; transform: translateY(-50%);
+    width: 42%; height: 80%;
+    overflow: hidden; border-radius: 4px;
+  }
+  .hero-img-placeholder {
+    width: 100%; height: 100%;
+    background: linear-gradient(160deg, #d4b896 0%, #8b6f4e 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1rem; color: rgba(255,255,255,0.7);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; letter-spacing: 0.1em;
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    background: var(--black); color: var(--white);
+    padding: 0.9rem 0; overflow: hidden;
+  }
+  .marquee-inner { display: flex; animation: marquee 20s linear infinite; white-space: nowrap; }
+  .marquee-inner span {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 0 3rem; color: var(--accent);
+  }
+  @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  /* SECTION HEADINGS */
+  .section { padding: 5rem 3rem; }
+  .section-header { text-align: center; margin-bottom: 3.5rem; }
+  .section-eyebrow {
+    font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--accent-dark); margin-bottom: 1rem; display: block;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem); font-weight: 300; color: var(--black);
+  }
+
+  /* FILTER */
+  .filter-bar {
+    display: flex; gap: 0.5rem; justify-content: center;
+    margin-bottom: 3rem; flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 0.4rem 1.2rem; border: 1px solid var(--light-gray);
+    background: transparent; cursor: pointer; font-size: 0.7rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+    color: var(--gray);
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--black); color: var(--white); border-color: var(--black);
+  }
+
+  /* PRODUCTS GRID */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 2rem;
+  }
+  .product-card {
+    cursor: pointer; transition: transform 0.3s;
+  }
+  .product-card:hover { transform: translateY(-4px); }
+  .product-img {
+    width: 100%; aspect-ratio: 3/4;
+    background: var(--cream);
+    overflow: hidden; position: relative; margin-bottom: 1rem;
+  }
+  .product-img-inner {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 4rem; transition: transform 0.5s;
+  }
+  .product-card:hover .product-img-inner { transform: scale(1.05); }
+  .product-badge {
+    position: absolute; top: 1rem; left: 1rem;
+    background: var(--black); color: var(--white);
+    font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+  }
+  .product-add {
+    position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%);
+    background: var(--white); color: var(--black);
+    border: none; cursor: pointer; padding: 0.6rem 1.5rem;
+    font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif; opacity: 0; transition: opacity 0.3s;
+    white-space: nowrap;
+  }
+  .product-card:hover .product-add { opacity: 1; }
+  .product-name {
+    font-size: 0.85rem; font-weight: 400; color: var(--black);
+    margin-bottom: 0.3rem;
+  }
+  .product-category { font-size: 0.7rem; color: var(--gray); margin-bottom: 0.5rem; }
+  .product-price { font-size: 0.9rem; font-weight: 500; color: var(--black); }
+  .product-price-old {
+    font-size: 0.8rem; color: var(--gray);
+    text-decoration: line-through; margin-right: 0.5rem;
+  }
+
+  /* ABOUT / ALAMAT */
+  #alamat { background: var(--cream); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .about-deco {
+    width: 100%; aspect-ratio: 1;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    border-radius: 50% 20% 60% 20%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 6rem;
+  }
+  .about-content h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem; font-weight: 300; margin-bottom: 1.5rem; line-height: 1.2;
+  }
+  .about-content p { color: var(--gray); line-height: 1.9; margin-bottom: 1.5rem; font-size: 0.9rem; }
+  .store-info { display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem; }
+  .store-info-item {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 1rem; background: var(--white); border-radius: 4px;
+  }
+  .store-info-icon { font-size: 1.2rem; }
+  .store-info-text h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+  .store-info-text p { font-size: 0.85rem; color: var(--gray); margin: 0; }
+
+  /* CART SIDEBAR */
+  .cart-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+    z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s;
+  }
+  .cart-overlay.open { opacity: 1; visibility: visible; }
+  .cart-sidebar {
+    position: fixed; right: 0; top: 0; bottom: 0; width: 420px;
+    background: var(--white); z-index: 2001;
+    transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    display: flex; flex-direction: column;
+  }
+  .cart-sidebar.open { transform: translateX(0); }
+  .cart-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--light-gray);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .cart-header h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-weight: 300;
+  }
+  .close-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 1.2rem; color: var(--gray); transition: color 0.2s;
+  }
+  .close-btn:hover { color: var(--black); }
+  .cart-items { flex: 1; overflow-y: auto; padding: 1.5rem 2rem; }
+  .cart-empty {
+    text-align: center; color: var(--gray);
+    font-size: 0.85rem; margin-top: 3rem;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.1rem;
+  }
+  .cart-item {
+    display: flex; gap: 1rem; margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem; border-bottom: 1px solid var(--light-gray);
+  }
+  .cart-item-img {
+    width: 70px; height: 90px; background: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; flex-shrink: 0;
+  }
+  .cart-item-info { flex: 1; }
+  .cart-item-name { font-size: 0.85rem; font-weight: 400; margin-bottom: 0.3rem; }
+  .cart-item-price { font-size: 0.8rem; color: var(--gray); margin-bottom: 0.8rem; }
+  .cart-item-qty { display: flex; align-items: center; gap: 0.5rem; }
+  .qty-btn {
+    width: 24px; height: 24px; border: 1px solid var(--light-gray);
+    background: none; cursor: pointer; font-size: 0.9rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .qty-btn:hover { background: var(--black); color: var(--white); border-color: var(--black); }
+  .qty-num { font-size: 0.85rem; min-width: 24px; text-align: center; }
+  .remove-item {
+    background: none; border: none; cursor: pointer;
+    color: var(--gray); font-size: 0.75rem;
+    margin-left: auto; align-self: flex-start;
+    text-decoration: underline; transition: color 0.2s;
+  }
+  .remove-item:hover { color: #c00; }
+  .cart-footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid var(--light-gray);
+  }
+  .cart-total {
+    display: flex; justify-content: space-between;
+    margin-bottom: 1rem; font-size: 0.9rem;
+  }
+  .cart-total span:last-child { font-weight: 500; }
+  .checkout-btn {
+    width: 100%; background: var(--black); color: var(--white);
+    border: none; cursor: pointer; padding: 1rem;
+    font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif; transition: background 0.2s;
+  }
+  .checkout-btn:hover { background: var(--accent-dark); }
+
+  /* CHECKOUT MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 3000; display: none; align-items: center; justify-content: center;
+    padding: 2rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--white); max-width: 580px; width: 100%;
+    max-height: 90vh; overflow-y: auto;
+    padding: 2.5rem;
+  }
+  .modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; font-weight: 300; margin-bottom: 2rem;
+  }
+  .form-group { margin-bottom: 1.2rem; }
+  .form-group label {
+    display: block; font-size: 0.7rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gray); margin-bottom: 0.5rem;
+  }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; border: 1px solid var(--light-gray);
+    padding: 0.75rem 1rem; font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem; outline: none; transition: border-color 0.2s;
+    background: var(--white); color: var(--text);
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--accent-dark);
+  }
+  .form-group textarea { height: 80px; resize: none; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .payment-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1rem 0; }
+  .payment-opt {
+    border: 1px solid var(--light-gray); padding: 0.8rem;
+    cursor: pointer; transition: all 0.2s; text-align: center;
+    font-size: 0.8rem;
+  }
+  .payment-opt.selected { border-color: var(--black); background: var(--cream); }
+  .payment-opt .pay-icon { font-size: 1.5rem; margin-bottom: 0.3rem; }
+  .payment-opt .pay-name { font-size: 0.7rem; letter-spacing: 0.05em; }
+  .order-summary {
+    background: var(--cream); padding: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .order-summary h4 {
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 1rem; color: var(--gray);
+  }
+  .order-row {
+    display: flex; justify-content: space-between;
+    font-size: 0.85rem; margin-bottom: 0.5rem;
+  }
+  .order-row.total {
+    border-top: 1px solid var(--light-gray); margin-top: 0.8rem;
+    padding-top: 0.8rem; font-weight: 500;
+  }
+  .wa-note {
+    background: #e8f5e9; border-left: 3px solid #4caf50;
+    padding: 0.8rem 1rem; margin-bottom: 1.5rem;
+    font-size: 0.8rem; color: #2e7d32; line-height: 1.6;
+  }
+  .modal-actions { display: flex; gap: 1rem; }
+  .modal-actions button { flex: 1; }
+  .success-modal {
+    text-align: center; padding: 3rem;
+    background: var(--white);
+    max-width: 420px; width: 100%;
+  }
+  .success-icon { font-size: 3rem; margin-bottom: 1.5rem; }
+  .success-modal h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; font-weight: 300; margin-bottom: 1rem;
+  }
+  .success-modal p { color: var(--gray); font-size: 0.85rem; line-height: 1.8; margin-bottom: 2rem; }
+
+  /* FOOTER */
+  footer {
+    background: var(--black); color: var(--white);
+    padding: 4rem 3rem 2rem;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem; margin-bottom: 3rem;
+  }
+  .footer-brand .nav-logo { color: var(--white); display: block; margin-bottom: 1rem; }
+  .footer-brand p { font-size: 0.8rem; color: #888; line-height: 1.8; }
+  .footer-col h4 {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1.2rem;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 0.6rem; }
+  .footer-col ul li a {
+    font-size: 0.8rem; color: #888; text-decoration: none; transition: color 0.2s;
+  }
+  .footer-col ul li a:hover { color: var(--white); }
+  .footer-bottom {
+    border-top: 1px solid #1a1a1a; padding-top: 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-bottom p { font-size: 0.75rem; color: #555; }
+  .wa-float {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+    background: #25d366; color: white; width: 56px; height: 56px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+    text-decoration: none; transition: transform 0.2s;
+  }
+  .wa-float:hover { transform: scale(1.1); }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    #beranda { padding: 6rem 1.5rem 3rem; flex-direction: column; min-height: auto; }
+    .hero-img-wrap { display: none; }
+    .section { padding: 3rem 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; }
+    .about-deco { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .cart-sidebar { width: 100%; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-up { animation: fadeUp 0.8s ease forwards; }
+  .fade-up-2 { animation: fadeUp 0.8s 0.2s ease forwards; opacity: 0; }
+  .fade-up-3 { animation: fadeUp 0.8s 0.4s ease forwards; opacity: 0; }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <a href="#beranda" class="nav-logo">LUMINA</a>
+  <ul class="nav-links">
+    <li><a href="#beranda">Beranda</a></li>
+    <li><a href="#produk">Produk</a></li>
+    <li><a href="#alamat">Tentang</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="cart-btn" onclick="openCart()">
+      🛍 Keranjang
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="beranda">
+  <div class="hero-content">
+    <p class="hero-eyebrow fade-up">Koleksi Terbaru 2025</p>
+    <h1 class="hero-title fade-up-2">
+      Mode yang<br><em>Berbicara</em><br>Sendiri
+    </h1>
+    <p class="hero-desc fade-up-3">
+      Temukan koleksi fashion premium yang dirancang untuk wanita & pria modern. Kualitas terbaik, desain eksklusif, harga terjangkau.
+    </p>
+    <div class="fade-up-3">
+      <a href="#produk" class="btn-primary">Lihat Koleksi</a>
+      <button class="btn-outline" onclick="openCart()">Keranjang Saya</button>
+    </div>
+  </div>
+  <div class="hero-img-wrap">
+    <div class="hero-img-placeholder">
+      <span style="font-size:5rem">👗</span>
+      <span>Koleksi Premium</span>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <span>Fashion Premium</span><span>•</span>
+    <span>Gratis Ongkir</span><span>•</span>
+    <span>Pembayaran Aman</span><span>•</span>
+    <span>Kualitas Terjamin</span><span>•</span>
+    <span>Original Brand</span><span>•</span>
+    <span>Fashion Premium</span><span>•</span>
+    <span>Gratis Ongkir</span><span>•</span>
+    <span>Pembayaran Aman</span><span>•</span>
+    <span>Kualitas Terjamin</span><span>•</span>
+    <span>Original Brand</span><span>•</span>
+  </div>
+</div>
+
+<!-- PRODUK -->
+<section id="produk" class="section">
+  <div class="section-header">
+    <span class="section-eyebrow">Koleksi Kami</span>
+    <h2 class="section-title">Pilihan Produk</h2>
+  </div>
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterProduct('semua', this)">Semua</button>
+    <button class="filter-btn" onclick="filterProduct('atasan', this)">Atasan</button>
+    <button class="filter-btn" onclick="filterProduct('bawahan', this)">Bawahan</button>
+    <button class="filter-btn" onclick="filterProduct('dress', this)">Dress</button>
+    <button class="filter-btn" onclick="filterProduct('aksesoris', this)">Aksesoris</button>
+  </div>
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+<!-- ALAMAT / TENTANG -->
+<section id="alamat" class="section">
+  <div class="about-grid">
+    <div class="about-deco">🏪</div>
+    <div class="about-content">
+      <span class="section-eyebrow">Tentang Toko</span>
+      <h2>LUMINA Fashion Store</h2>
+      <p>
+        Kami adalah toko fashion online yang berdedikasi menghadirkan koleksi pakaian premium dengan desain kontemporer. Setiap produk kami pilih dengan teliti untuk memastikan kualitas terbaik sampai ke tanganmu.
+      </p>
+      <p>
+        Berbelanja dengan aman, nyaman, dan dapatkan produk original langsung dari tangan kami.
+      </p>
+      <div class="store-info">
+        <div class="store-info-item">
+          <span class="store-info-icon">📍</span>
+          <div class="store-info-text">
+            <h4>Alamat</h4>
+            <p>Jl. Moda Indah No. 12, Bandung, Jawa Barat 40251</p>
+          </div>
+        </div>
+        <div class="store-info-item">
+          <span class="store-info-icon">⏰</span>
+          <div class="store-info-text">
+            <h4>Jam Operasional</h4>
+            <p>Senin – Sabtu: 09.00 – 20.00 WIB<br>Minggu: 10.00 – 17.00 WIB</p>
+          </div>
+        </div>
+        <div class="store-info-item">
+          <span class="store-info-icon">📱</span>
+          <div class="store-info-text">
+            <h4>Kontak</h4>
+            <p>WhatsApp: 0812-3456-7890<br>Email: lumina@email.com</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="nav-logo">LUMINA</span>
+      <p>Fashion premium yang berbicara lewat setiap detail. Kami berkomitmen menghadirkan pengalaman berbelanja terbaik.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigasi</h4>
+      <ul>
+        <li><a href="#beranda">Beranda</a></li>
+        <li><a href="#produk">Produk</a></li>
+        <li><a href="#alamat">Tentang</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Bantuan</h4>
+      <ul>
+        <li><a href="#">Cara Pesan</a></li>
+        <li><a href="#">Pengiriman</a></li>
+        <li><a href="#">Pengembalian</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Sosial Media</h4>
+      <ul>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">TikTok</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">WhatsApp</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 LUMINA Fashion Store. All rights reserved.</p>
+    <p>Dibuat dengan ❤️ di Indonesia</p>
+  </div>
+</footer>
+
+<!-- WA FLOAT -->
+<a class="wa-float" href="https://wa.me/6281234567890" target="_blank" title="Chat WhatsApp">
+  💬
+</a>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h3>Keranjang Belanja</h3>
+    <button class="close-btn" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <p class="cart-empty">Keranjangmu masih kosong 🛍</p>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>Total</span>
+      <span id="cartTotal">Rp 0</span>
+    </div>
+    <button class="checkout-btn" onclick="openCheckout()">Lanjutkan Pembayaran →</button>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal">
+    <h2 class="modal-title">Detail Pemesanan</h2>
+
+    <div class="order-summary">
+      <h4>Ringkasan Pesanan</h4>
+      <div id="summaryItems"></div>
+      <div class="order-row">
+        <span>Subtotal</span><span id="summarySubtotal">Rp 0</span>
+      </div>
+      <div class="order-row">
+        <span>Ongkos Kirim</span><span>Rp 15.000</span>
+      </div>
+      <div class="order-row total">
+        <span>Total Bayar</span><span id="summaryTotal">Rp 0</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Nama Lengkap *</label>
+      <input type="text" id="formNama" placeholder="Masukkan nama lengkap">
+    </div>
+    <div class="form-group">
+      <label>Nomor WhatsApp *</label>
+      <input type="tel" id="formWA" placeholder="Contoh: 08123456789">
+    </div>
+    <div class="form-group">
+      <label>Alamat Lengkap *</label>
+      <textarea id="formAlamat" placeholder="Jl. Contoh No. 1, Kelurahan, Kecamatan, Kota, Kode Pos"></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Kota *</label>
+        <input type="text" id="formKota" placeholder="Bandung">
+      </div>
+      <div class="form-group">
+        <label>Kode Pos *</label>
+        <input type="text" id="formKodePos" placeholder="40251">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Metode Pembayaran *</label>
+      <div class="payment-methods">
+        <div class="payment-opt selected" onclick="selectPayment(this, 'Transfer Bank BCA')">
+          <div class="pay-icon">🏦</div>
+          <div class="pay-name">Transfer BCA</div>
+        </div>
+        <div class="payment-opt" onclick="selectPayment(this, 'Transfer Bank Mandiri')">
+          <div class="pay-icon">🏦</div>
+          <div class="pay-name">Transfer Mandiri</div>
+        </div>
+        <div class="payment-opt" onclick="selectPayment(this, 'DANA / OVO / GoPay')">
+          <div class="pay-icon">📱</div>
+          <div class="pay-name">E-Wallet</div>
+        </div>
+        <div class="payment-opt" onclick="selectPayment(this, 'COD (Bayar di Tempat)')">
+          <div class="pay-icon">💵</div>
+          <div class="pay-name">COD</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wa-note">
+      📱 <strong>Konfirmasi via WhatsApp</strong><br>
+      Setelah kamu klik "Pesan Sekarang", detail pesananmu akan otomatis dikirim ke WhatsApp kami untuk diproses. Kamu juga akan mendapat konfirmasi dari kami!
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-outline" onclick="closeCheckout()" style="padding:0.9rem">Kembali</button>
+      <button class="btn-primary" onclick="submitOrder()" style="padding:1rem 2rem;flex:2">
+        📱 Pesan via WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal">
+  <div class="success-modal">
+    <div class="success-icon">✅</div>
+    <h2>Pesanan Berhasil!</h2>
+    <p>
+      Pesananmu sudah dikirim ke WhatsApp kami. Tim kami akan segera mengkonfirmasi pesanan dalam waktu 1×24 jam.<br><br>
+      Terima kasih sudah berbelanja di <strong>LUMINA</strong>! 🛍
+    </p>
+    <button class="btn-primary" onclick="closeSuccess()">Tutup</button>
+  </div>
+</div>
+
+<script>
+// ===================== DATA PRODUK =====================
+// KUSTOMISASI: Ganti data produk di sini sesuai tokomu!
+const products = [
+  { id:1, name:"Kemeja Linen Premium", category:"atasan", price:189000, oldPrice:250000, emoji:"👔", badge:"Sale", desc:"Kemeja linen premium, adem dan stylish" },
+  { id:2, name:"Midi Dress Floral", category:"dress", price:275000, oldPrice:null, emoji:"👗", badge:"New", desc:"Dress floral elegan untuk berbagai kesempatan" },
+  { id:3, name:"Celana Palazzo Wide Leg", category:"bawahan", price:210000, oldPrice:null, emoji:"👖", badge:null, desc:"Celana palazzo yang nyaman dan trendi" },
+  { id:4, name:"Blouse Puff Sleeve", category:"atasan", price:155000, oldPrice:195000, emoji:"👚", badge:"Sale", desc:"Blouse lengan balon yang feminin" },
+  { id:5, name:"Maxi Dress Polos", category:"dress", price:320000, oldPrice:null, emoji:"👘", badge:"New", desc:"Maxi dress elegan untuk acara formal" },
+  { id:6, name:"Rok Mini Plisket", category:"bawahan", price:135000, oldPrice:null, emoji:"👗", badge:null, desc:"Rok mini plisket yang playful & stylish" },
+  { id:7, name:"Tas Tote Premium", category:"aksesoris", price:245000, oldPrice:null, emoji:"👜", badge:"New", desc:"Tas tote bahan canvas premium" },
+  { id:8, name:"Topi Bucket Trendy", category:"aksesoris", price:89000, oldPrice:null, emoji:"🧢", badge:null, desc:"Topi bucket trendi untuk sehari-hari" },
+];
+
+// ===================== NOMOR WA TOKO =====================
+// PENTING: Ganti dengan nomor WA tokomu! Format: 62xxxx (tanpa +)
+const NOMOR_WA_TOKO = "6281234567890";
+
+// ===================== CART =====================
+let cart = [];
+let selectedPayment = "Transfer Bank BCA";
+
+function formatRupiah(n) {
+  return "Rp " + n.toLocaleString("id-ID");
+}
+
+function renderProducts(filter = "semua") {
+  const grid = document.getElementById("productsGrid");
+  const filtered = filter === "semua" ? products : products.filter(p => p.category === filter);
+  grid.innerHTML = filtered.map(p => `
+    <div class="product-card" data-cat="${p.category}">
+      <div class="product-img">
+        <div class="product-img-inner">${p.emoji}</div>
+        ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ""}
+        <button class="product-add" onclick="addToCart(${p.id})">+ Tambah ke Keranjang</button>
+      </div>
+      <div class="product-name">${p.name}</div>
+      <div class="product-category">${p.category.charAt(0).toUpperCase()+p.category.slice(1)}</div>
+      <div class="product-price">
+        ${p.oldPrice ? `<span class="product-price-old">${formatRupiah(p.oldPrice)}</span>` : ""}
+        ${formatRupiah(p.price)}
+      </div>
+    </div>
+  `).join("");
+}
+
+function filterProduct(cat, btn) {
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  renderProducts(cat);
+}
+
+function addToCart(id) {
+  const p = products.find(x => x.id === id);
+  const existing = cart.find(x => x.id === id);
+  if (existing) { existing.qty++; }
+  else { cart.push({ ...p, qty: 1 }); }
+  updateCartUI();
+  openCart();
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(x => x.id !== id);
+  updateCartUI();
+}
+
+function changeQty(id, delta) {
+  const item = cart.find(x => x.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) { removeFromCart(id); return; }
+  updateCartUI();
+}
+
+function updateCartUI() {
+  const count = cart.reduce((s, x) => s + x.qty, 0);
+  const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+  document.getElementById("cartCount").textContent = count;
+  document.getElementById("cartTotal").textContent = formatRupiah(total);
+
+  const container = document.getElementById("cartItems");
+  if (cart.length === 0) {
+    container.innerHTML = `<p class="cart-empty">Keranjangmu masih kosong 🛍</p>`;
+    return;
+  }
+  container.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-img">${item.emoji}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">${formatRupiah(item.price)}</div>
+        <div class="cart-item-qty">
+          <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+          <button class="remove-item" onclick="removeFromCart(${item.id})">Hapus</button>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+// ===================== CART OPEN/CLOSE =====================
+function openCart() {
+  document.getElementById("cartOverlay").classList.add("open");
+  document.getElementById("cartSidebar").classList.add("open");
+}
+function closeCart() {
+  document.getElementById("cartOverlay").classList.remove("open");
+  document.getElementById("cartSidebar").classList.remove("open");
+}
+
+// ===================== CHECKOUT =====================
+function selectPayment(el, method) {
+  document.querySelectorAll(".payment-opt").forEach(e => e.classList.remove("selected"));
+  el.classList.add("selected");
+  selectedPayment = method;
+}
+
+function openCheckout() {
+  if (cart.length === 0) { alert("Keranjang masih kosong!"); return; }
+  closeCart();
+  const subtotal = cart.reduce((s, x) => s + x.price * x.qty, 0);
+  const ongkir = 15000;
+  const total = subtotal + ongkir;
+
+  document.getElementById("summaryItems").innerHTML = cart.map(i =>
+    `<div class="order-row"><span>${i.name} ×${i.qty}</span><span>${formatRupiah(i.price * i.qty)}</span></div>`
+  ).join("");
+  document.getElementById("summarySubtotal").textContent = formatRupiah(subtotal);
+  document.getElementById("summaryTotal").textContent = formatRupiah(total);
+
+  document.getElementById("checkoutModal").classList.add("open");
+}
+function closeCheckout() {
+  document.getElementById("checkoutModal").classList.remove("open");
+}
+
+// ===================== SUBMIT ORDER → WA =====================
+function submitOrder() {
+  const nama = document.getElementById("formNama").value.trim();
+  const wa = document.getElementById("formWA").value.trim();
+  const alamat = document.getElementById("formAlamat").value.trim();
+  const kota = document.getElementById("formKota").value.trim();
+  const kodepos = document.getElementById("formKodePos").value.trim();
+
+  if (!nama || !wa || !alamat || !kota || !kodepos) {
+    alert("Mohon lengkapi semua data yang wajib diisi (*) terlebih dahulu.");
+    return;
+  }
+
+  const subtotal = cart.reduce((s, x) => s + x.price * x.qty, 0);
+  const ongkir = 15000;
+  const total = subtotal + ongkir;
+
+  // Format pesan WhatsApp
+  const itemList = cart.map(i => `• ${i.name} ×${i.qty} = ${formatRupiah(i.price * i.qty)}`).join("\n");
+  const orderNo = "LMN" + Date.now().toString().slice(-6);
+
+  const pesan = `
+🛍 *PESANAN BARU — LUMINA*
+━━━━━━━━━━━━━━━━━━━
+🔖 No. Pesanan: *${orderNo}*
+
+👤 *DATA PEMESAN*
+Nama: ${nama}
+WhatsApp: ${wa}
+Alamat: ${alamat}
+Kota: ${kota} ${kodepos}
+
+🧾 *DETAIL PESANAN*
+${itemList}
+━━━━━━━━━━━━━━━━━━━
+Subtotal: ${formatRupiah(subtotal)}
+Ongkos Kirim: ${formatRupiah(ongkir)}
+*Total Bayar: ${formatRupiah(total)}*
+
+💳 Metode Bayar: ${selectedPayment}
+
+Mohon dikonfirmasi segera, terima kasih! 🙏
+  `.trim();
+
+  const url = `https://wa.me/${NOMOR_WA_TOKO}?text=${encodeURIComponent(pesan)}`;
+  window.open(url, "_blank");
+
+  closeCheckout();
+  cart = [];
+  updateCartUI();
+  document.getElementById("successModal").classList.add("open");
+}
+
+function closeSuccess() {
+  document.getElementById("successModal").classList.remove("open");
+}
+
+// ===================== INIT =====================
+renderProducts();
+</script>
+</body>
+</html>
