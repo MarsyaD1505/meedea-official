@@ -99,12 +99,6 @@
     transition: all 0.2s; margin-left: 1rem;
   }
   .btn-outline:hover { background: var(--black); color: var(--white); }
-  .hero-deco {
-    position: absolute; right: -5%; top: 50%; transform: translateY(-50%);
-    width: 55%; height: 90%;
-    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
-    opacity: 0.12; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-  }
   .hero-img-wrap {
     position: absolute; right: 3rem; top: 50%; transform: translateY(-50%);
     width: 42%; height: 80%;
@@ -167,6 +161,7 @@
   }
   .product-card {
     cursor: pointer; transition: transform 0.3s;
+    display: flex; flex-direction: column;
   }
   .product-card:hover { transform: translateY(-4px); }
   .product-img {
@@ -174,37 +169,51 @@
     background: var(--cream);
     overflow: hidden; position: relative; margin-bottom: 1rem;
   }
-  .product-img-inner {
-    width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 4rem; transition: transform 0.5s;
+  .product-img img {
+    width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;
   }
-  .product-card:hover .product-img-inner { transform: scale(1.05); }
   .product-badge {
     position: absolute; top: 1rem; left: 1rem;
     background: var(--black); color: var(--white);
     font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 0.25rem 0.6rem;
+    padding: 0.25rem 0.6rem; z-index: 2;
   }
   .product-add {
     position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%);
-    background: var(--white); color: var(--black);
+    background: var(--black); color: var(--white);
     border: none; cursor: pointer; padding: 0.6rem 1.5rem;
     font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
     font-family: 'DM Sans', sans-serif; opacity: 0; transition: opacity 0.3s;
-    white-space: nowrap;
+    white-space: nowrap; z-index: 2;
   }
   .product-card:hover .product-add { opacity: 1; }
   .product-name {
     font-size: 0.85rem; font-weight: 400; color: var(--black);
     margin-bottom: 0.3rem;
   }
-  .product-category { font-size: 0.7rem; color: var(--gray); margin-bottom: 0.5rem; }
+  .product-category { font-size: 0.7rem; color: var(--gray); margin-bottom: 0.5rem; text-transform: capitalize; }
   .product-price { font-size: 0.9rem; font-weight: 500; color: var(--black); }
   .product-price-old {
     font-size: 0.8rem; color: var(--gray);
     text-decoration: line-through; margin-right: 0.5rem;
   }
+
+  /* VARIANT SELECTORS (IN CARD) */
+  .variant-options-wrap {
+    margin: 0.5rem 0;
+  }
+  .option-title { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray); margin-bottom: 0.25rem; }
+  .color-dots { display: flex; gap: 0.4rem; margin-bottom: 0.5rem; }
+  .color-dot {
+    width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--light-gray);
+    cursor: pointer; position: relative; overflow: hidden; background-size: cover; background-position: center;
+  }
+  .color-dot.active { border: 2px solid var(--black); transform: scale(1.1); }
+  .size-boxes { display: flex; gap: 0.3rem; }
+  .size-box {
+    padding: 0.2rem 0.5rem; border: 1px solid var(--light-gray); font-size: 0.65rem; cursor: pointer; text-transform: uppercase;
+  }
+  .size-box.active { background: var(--black); color: var(--white); border-color: var(--black); }
 
   /* ABOUT / ALAMAT */
   #alamat { background: var(--cream); }
@@ -269,11 +278,12 @@
   }
   .cart-item-img {
     width: 70px; height: 90px; background: var(--cream);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 2rem; flex-shrink: 0;
+    flex-shrink: 0; overflow: hidden;
   }
+  .cart-item-img img { width: 100%; height: 100%; object-fit: cover; }
   .cart-item-info { flex: 1; }
-  .cart-item-name { font-size: 0.85rem; font-weight: 400; margin-bottom: 0.3rem; }
+  .cart-item-name { font-size: 0.85rem; font-weight: 400; margin-bottom: 0.1rem; }
+  .cart-item-meta { font-size: 0.7rem; color: var(--accent-dark); margin-bottom: 0.4rem; font-weight: 500; }
   .cart-item-price { font-size: 0.8rem; color: var(--gray); margin-bottom: 0.8rem; }
   .cart-item-qty { display: flex; align-items: center; gap: 0.5rem; }
   .qty-btn {
@@ -340,7 +350,7 @@
   }
   .form-group textarea { height: 80px; resize: none; }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .payment-methods { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1rem 0; }
+  .payment-methods { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin: 1rem 0; }
   .payment-opt {
     border: 1px solid var(--light-gray); padding: 0.8rem;
     cursor: pointer; transition: all 0.2s; text-align: center;
@@ -445,9 +455,8 @@
 </head>
 <body>
 
-<!-- NAVIGATION -->
 <nav>
-  <a href="#beranda" class="nav-logo">LUMINA</a>
+  <a href="#beranda" class="nav-logo">MEEDEA</a>
   <ul class="nav-links">
     <li><a href="#beranda">Beranda</a></li>
     <li><a href="#produk">Produk</a></li>
@@ -461,15 +470,14 @@
   </div>
 </nav>
 
-<!-- HERO -->
 <section id="beranda">
   <div class="hero-content">
-    <p class="hero-eyebrow fade-up">Koleksi Terbaru 2025</p>
+    <p class="hero-eyebrow fade-up">MEEDEA OFFICIAL</p>
     <h1 class="hero-title fade-up-2">
-      Mode yang<br><em>Berbicara</em><br>Sendiri
+      Fashion Premium<br>& <em>Semi Blazer</em>
     </h1>
     <p class="hero-desc fade-up-3">
-      Temukan koleksi fashion premium yang dirancang untuk wanita & pria modern. Kualitas terbaik, desain eksklusif, harga terjangkau.
+      Kami menyediakan pakaian premium & elegan yang dirancang untukmu yang ingin tampil percaya diri dengan bahan berkualitas, potongan modern, dan desain yang timeless.
     </p>
     <div class="fade-up-3">
       <a href="#produk" class="btn-primary">Lihat Koleksi</a>
@@ -478,13 +486,12 @@
   </div>
   <div class="hero-img-wrap">
     <div class="hero-img-placeholder">
-      <span style="font-size:5rem">👗</span>
-      <span>Koleksi Premium</span>
+      <span style="font-size:5rem">✨</span>
+      <span>Elegant & Timeless</span>
     </div>
   </div>
 </section>
 
-<!-- MARQUEE -->
 <div class="marquee-wrap">
   <div class="marquee-inner">
     <span>Fashion Premium</span><span>•</span>
@@ -500,7 +507,6 @@
   </div>
 </div>
 
-<!-- PRODUK -->
 <section id="produk" class="section">
   <div class="section-header">
     <span class="section-eyebrow">Koleksi Kami</span>
@@ -509,46 +515,40 @@
   <div class="filter-bar">
     <button class="filter-btn active" onclick="filterProduct('semua', this)">Semua</button>
     <button class="filter-btn" onclick="filterProduct('atasan', this)">Atasan</button>
-    <button class="filter-btn" onclick="filterProduct('bawahan', this)">Bawahan</button>
-    <button class="filter-btn" onclick="filterProduct('dress', this)">Dress</button>
-    <button class="filter-btn" onclick="filterProduct('aksesoris', this)">Aksesoris</button>
+    <button class="filter-btn" onclick="filterProduct('oneset', this)">Oneset</button>
   </div>
   <div class="products-grid" id="productsGrid"></div>
 </section>
 
-<!-- ALAMAT / TENTANG -->
 <section id="alamat" class="section">
   <div class="about-grid">
     <div class="about-deco">🏪</div>
     <div class="about-content">
       <span class="section-eyebrow">Tentang Toko</span>
-      <h2>LUMINA Fashion Store</h2>
+      <h2>MEEDEA OFFICIAL</h2>
       <p>
-        Kami adalah toko fashion online yang berdedikasi menghadirkan koleksi pakaian premium dengan desain kontemporer. Setiap produk kami pilih dengan teliti untuk memastikan kualitas terbaik sampai ke tanganmu.
-      </p>
-      <p>
-        Berbelanja dengan aman, nyaman, dan dapatkan produk original langsung dari tangan kami.
+        Kami menyediakan pakaian premium & elegan yang dirancang untukmu yang ingin tampil percaya diri dengan bahan berkualitas, potongan modern, dan desain yang timeless. Setiap produk kami pilih dengan teliti untuk memastikan kualitas terbaik sampai ke tanganmu.
       </p>
       <div class="store-info">
         <div class="store-info-item">
           <span class="store-info-icon">📍</span>
           <div class="store-info-text">
             <h4>Alamat</h4>
-            <p>Jl. Moda Indah No. 12, Bandung, Jawa Barat 40251</p>
+            <p>Purwakarta, Jawa Barat</p>
           </div>
         </div>
         <div class="store-info-item">
           <span class="store-info-icon">⏰</span>
           <div class="store-info-text">
             <h4>Jam Operasional</h4>
-            <p>Senin – Sabtu: 09.00 – 20.00 WIB<br>Minggu: 10.00 – 17.00 WIB</p>
+            <p>Senin – Minggu: 08.00 – 20.00 WIB</p>
           </div>
         </div>
         <div class="store-info-item">
           <span class="store-info-icon">📱</span>
           <div class="store-info-text">
-            <h4>Kontak</h4>
-            <p>WhatsApp: 0812-3456-7890<br>Email: lumina@email.com</p>
+            <h4>Kontak & Web</h4>
+            <p>WhatsApp: 0812-XXXX-XXXX<br>Web: meedeaofficial.com</p>
           </div>
         </div>
       </div>
@@ -556,12 +556,11 @@
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <span class="nav-logo">LUMINA</span>
-      <p>Fashion premium yang berbicara lewat setiap detail. Kami berkomitmen menghadirkan pengalaman berbelanja terbaik.</p>
+      <span class="nav-logo">MEEDEA</span>
+      <p>Fashion premium & semi blazer yang berbicara lewat setiap detail. Kami berkomitmen menghadirkan pengalaman berbelanja terbaik.</p>
     </div>
     <div class="footer-col">
       <h4>Navigasi</h4>
@@ -583,25 +582,23 @@
     <div class="footer-col">
       <h4>Sosial Media</h4>
       <ul>
-        <li><a href="#">Instagram</a></li>
-        <li><a href="#">TikTok</a></li>
-        <li><a href="#">Facebook</a></li>
+        <li><a href="#" id="linkInstagram" target="_blank">Instagram</a></li>
+        <li><a href="#" id="linkTikTok" target="_blank">TikTok</a></li>
+        <li><a href="#" id="linkShopee" target="_blank">Shopee</a></li>
         <li><a href="#">WhatsApp</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2025 LUMINA Fashion Store. All rights reserved.</p>
+    <p>© 2026 MEEDEA OFFICIAL. All rights reserved.</p>
     <p>Dibuat dengan ❤️ di Indonesia</p>
   </div>
 </footer>
 
-<!-- WA FLOAT -->
-<a class="wa-float" href="https://wa.me/6281234567890" target="_blank" title="Chat WhatsApp">
+<a class="wa-float" id="waFloatLink" href="https://wa.me/6281234567890" target="_blank" title="Chat WhatsApp">
   💬
 </a>
 
-<!-- CART SIDEBAR -->
 <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 <div class="cart-sidebar" id="cartSidebar">
   <div class="cart-header">
@@ -620,7 +617,6 @@
   </div>
 </div>
 
-<!-- CHECKOUT MODAL -->
 <div class="modal-overlay" id="checkoutModal">
   <div class="modal">
     <h2 class="modal-title">Detail Pemesanan</h2>
@@ -654,32 +650,28 @@
     <div class="form-row">
       <div class="form-group">
         <label>Kota *</label>
-        <input type="text" id="formKota" placeholder="Bandung">
+        <input type="text" id="formKota" placeholder="Purwakarta">
       </div>
       <div class="form-group">
         <label>Kode Pos *</label>
-        <input type="text" id="formKodePos" placeholder="40251">
+        <input type="text" id="formKodePos" placeholder="41111">
       </div>
     </div>
 
     <div class="form-group">
       <label>Metode Pembayaran *</label>
       <div class="payment-methods">
-        <div class="payment-opt selected" onclick="selectPayment(this, 'Transfer Bank BCA')">
+        <div class="payment-opt selected" onclick="selectPayment(this, 'Transfer Manual')">
           <div class="pay-icon">🏦</div>
-          <div class="pay-name">Transfer BCA</div>
+          <div class="pay-name">Transfer Bank</div>
         </div>
-        <div class="payment-opt" onclick="selectPayment(this, 'Transfer Bank Mandiri')">
-          <div class="pay-icon">🏦</div>
-          <div class="pay-name">Transfer Mandiri</div>
-        </div>
-        <div class="payment-opt" onclick="selectPayment(this, 'DANA / OVO / GoPay')">
+        <div class="payment-opt" onclick="selectPayment(this, 'QRIS')">
           <div class="pay-icon">📱</div>
-          <div class="pay-name">E-Wallet</div>
+          <div class="pay-name">QRIS</div>
         </div>
-        <div class="payment-opt" onclick="selectPayment(this, 'COD (Bayar di Tempat)')">
-          <div class="pay-icon">💵</div>
-          <div class="pay-name">COD</div>
+        <div class="payment-opt" onclick="selectPayment(this, 'ShopeePay')">
+          <div class="pay-icon">🛍️</div>
+          <div class="pay-name">ShopeePay</div>
         </div>
       </div>
     </div>
@@ -698,69 +690,61 @@
   </div>
 </div>
 
-<!-- SUCCESS MODAL -->
 <div class="modal-overlay" id="successModal">
   <div class="success-modal">
     <div class="success-icon">✅</div>
     <h2>Pesanan Berhasil!</h2>
     <p>
       Pesananmu sudah dikirim ke WhatsApp kami. Tim kami akan segera mengkonfirmasi pesanan dalam waktu 1×24 jam.<br><br>
-      Terima kasih sudah berbelanja di <strong>LUMINA</strong>! 🛍
+      Terima kasih sudah berbelanja di <strong>MEEDEA OFFICIAL</strong>! 🛍
     </p>
     <button class="btn-primary" onclick="closeSuccess()">Tutup</button>
   </div>
 </div>
 
 <script>
-// ===================== DATA PRODUK =====================
-// KUSTOMISASI: Ganti data produk di sini sesuai tokomu!
+// ===================== DATA PRODUK (DENGAN WARNA, FOTO TIAP WARNA, & SIZE) =====================
 const products = [
-  { id:1, 
-   name:"MEEDEA - ARABELLA SHIRT", 
-   category:"atasan", 
-   price:150000, 
-   oldPrice:160000, 
-   badge:"Sale", 
-   // Variasi Warna
-   colors: [
-     { name: "Broken White", img: "https://ibb.co/356DncLR" },
-     { name: "Nude Beige", img: "https://ibb.co/356DncLR" },
-  ],
-   // Variasi Ukuran
-   sizes: ["M", "L", "XL"]
+  { 
+    id: 1, 
+    name: "Semi Blazer Premium Linda", 
+    category: "atasan", 
+    price: 199000, 
+    oldPrice: 250000, 
+    badge: "Sale",
+    // Daftar variasi warna dan foto masing-masing warna
+    colors: [
+      { name: "Black", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500" },
+      { name: "Cream", img: "https://images.unsplash.com/photo-1548624149-f9b1859aa7d0?w=500" },
+      { name: "Terracotta", img: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500" }
+    ],
+    // Daftar variasi ukuran
+    sizes: ["S", "M", "L", "XL"]
   },
-  { id:2, 
-   name:"MEEDEA - CLAIRE",
-   category:"atasan",
-   price:275000, oldPrice:null,
-   badge:"New", 
-   desc:"Dress floral elegan untuk berbagai kesempatan" },
-  // Variasi Warna
-   colors: [
-     { name: "Broken White", img: "https://ibb.co/356DncLR" },
-     { name: "Nude Beige", img: "https://ibb.co/356DncLR" },
-  ],
-  // Variasi Ukuran
-  sizes: ["M", "L", "XL"]
-  },
-  { id:3, name:"Celana Palazzo Wide Leg", category:"bawahan", price:210000, oldPrice:null, emoji:"👖", badge:null, desc:"Celana palazzo yang nyaman dan trendi" },
-  { id:4, name:"Blouse Puff Sleeve", category:"atasan", price:155000, oldPrice:195000, emoji:"👚", badge:"Sale", desc:"Blouse lengan balon yang feminin" },
-  { id:5, name:"Maxi Dress Polos", category:"dress", price:320000, oldPrice:null, emoji:"👘", badge:"New", desc:"Maxi dress elegan untuk acara formal" },
-  { id:6, name:"Rok Mini Plisket", category:"bawahan", price:135000, oldPrice:null, emoji:"👗", badge:null, desc:"Rok mini plisket yang playful & stylish" },
-  { id:7, name:"Tas Tote Premium", category:"aksesoris", price:245000, oldPrice:null, emoji:"👜", badge:"New", desc:"Tas tote bahan canvas premium" },
-  { id:8, name:"Topi Bucket Trendy", category:"aksesoris", price:89000, oldPrice:null, emoji:"🧢", badge:null, desc:"Topi bucket trendi untuk sehari-hari" },
+  { 
+    id: 2, 
+    name: "Oneset Casual Elegan Hana", 
+    category: "oneset", 
+    price: 249000, 
+    oldPrice: null, 
+    badge: "New",
+    colors: [
+      { name: "Milo", img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=500" },
+      { name: "Sage Green", img: "https://images.unsplash.com/photo-1548624149-f9b1859aa7d0?w=500" }
+    ],
+    sizes: ["All Size", "Big Size"]
+  }
 ];
 
-// Menyimpan Pilihan sementara pembeli sebelum klik masukan keranjang
-  let selectedVariants = {};
-  
-// ===================== NOMOR WA TOKO =====================
-// PENTING: Ganti dengan nomor WA tokomu! Format: 62xxxx (tanpa +)
-const NOMOR_WA_TOKO = "6282124486398";
+// Menyimpan pilihan sementara pembeli sebelum klik masukkan keranjang
+let selectedVariants = {}; 
 
-// ===================== CART =====================
+// ===================== NOMOR WA TOKO =====================
+const NOMOR_WA_TOKO = "6281234567890";
+
+// ===================== RUNTIME SYSTEM =====================
 let cart = [];
-let selectedPayment = "Transfer Bank BCA";
+let selectedPayment = "Transfer Manual";
 
 function formatRupiah(n) {
   return "Rp " + n.toLocaleString("id-ID");
@@ -769,6 +753,7 @@ function formatRupiah(n) {
 function renderProducts(filter = "semua") {
   const grid = document.getElementById("productsGrid");
   const filtered = filter === "semua" ? products : products.filter(p => p.category === filter);
+  
   grid.innerHTML = filtered.map(p => {
     // Set default pilihan warna pertama dan size pertama jika belum diatur
     if (!selectedVariants[p.id]) {
@@ -1001,9 +986,6 @@ window.onload = function() {
   document.getElementById("waFloatLink").href = "https://wa.me/" + NOMOR_WA_TOKO;
   renderProducts();
 };
-</script>
-</body>
-</html>
 </script>
 </body>
 </html>
